@@ -22,18 +22,20 @@ class SelectQuestionDifficultyScreen extends StatelessWidget {
     const difficulties = QuestionDifficulty.values;
     return SimpleScaffold(
       title: 'Select Difficulty',
-      body: ListView.builder(
-        itemBuilder: (final context, final index) {
-          final value = difficulties[index];
-          return SoundMenuItem(
-            child: ListTile(
-              autofocus: value == QuestionDifficulty.medium,
-              title: Text(value.name.titleCase),
-              onTap: () => onDone(value),
-            ),
-          );
-        },
-        itemCount: difficulties.length,
+      body: Center(
+        child: ListView.builder(
+          itemBuilder: (final context, final index) {
+            final value = difficulties[index];
+            return SoundMenuItem(
+              child: ListTile(
+                autofocus: value == QuestionDifficulty.medium,
+                title: Text(value.name.titleCase),
+                onTap: () => onDone(value),
+              ),
+            );
+          },
+          itemCount: difficulties.length,
+        ),
       ),
     );
   }

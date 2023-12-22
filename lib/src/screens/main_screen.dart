@@ -49,34 +49,36 @@ class MainScreenState extends State<MainScreen> {
   Widget build(final BuildContext context) => QuestionFactoryBuilder(
         builder: (final context, final questionFactory) => SimpleScaffold(
           title: 'Trivia',
-          body: ListView(
-            children: [
-              SoundMenuItem(
-                child: ListTile(
-                  autofocus: true,
-                  title: const Text('Play Game'),
-                  onTap: () {
-                    playActivateSound();
-                    context.pushWidgetBuilder(
-                      (final context) => QuestionsSessionScreen(
-                        questionFactory: questionFactory,
-                      ),
-                    );
-                  },
+          body: Center(
+            child: ListView(
+              children: [
+                SoundMenuItem(
+                  child: ListTile(
+                    autofocus: true,
+                    title: const Text('Play Game'),
+                    onTap: () {
+                      playActivateSound();
+                      context.pushWidgetBuilder(
+                        (final context) => QuestionsSessionScreen(
+                          questionFactory: questionFactory,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              SoundMenuItem(
-                child: ListTile(
-                  title: const Text('Visit Open Trivia DB'),
-                  onTap: () {
-                    playActivateSound();
-                    launchUrl(
-                      Uri.parse('https://opentdb.com/api_config.php'),
-                    );
-                  },
+                SoundMenuItem(
+                  child: ListTile(
+                    title: const Text('Visit Open Trivia DB'),
+                    onTap: () {
+                      playActivateSound();
+                      launchUrl(
+                        Uri.parse('https://opentdb.com/api_config.php'),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         error: ErrorScreen.withPositional,
