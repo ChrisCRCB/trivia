@@ -1,4 +1,5 @@
 import 'package:backstreets_widgets/screens.dart';
+import 'package:backstreets_widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
 import 'package:recase/recase.dart';
@@ -20,21 +21,23 @@ class SelectQuestionDifficultyScreen extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     const difficulties = QuestionDifficulty.values;
-    return SimpleScaffold(
-      title: 'Select Difficulty',
-      body: Center(
-        child: ListView.builder(
-          itemBuilder: (final context, final index) {
-            final value = difficulties[index];
-            return SoundMenuItem(
-              child: ListTile(
-                autofocus: value == QuestionDifficulty.medium,
-                title: Text(value.name.titleCase),
-                onTap: () => onDone(value),
-              ),
-            );
-          },
-          itemCount: difficulties.length,
+    return Cancel(
+      child: SimpleScaffold(
+        title: 'Select Difficulty',
+        body: Center(
+          child: ListView.builder(
+            itemBuilder: (final context, final index) {
+              final value = difficulties[index];
+              return SoundMenuItem(
+                child: ListTile(
+                  autofocus: value == QuestionDifficulty.medium,
+                  title: Text(value.name.titleCase),
+                  onTap: () => onDone(value),
+                ),
+              );
+            },
+            itemCount: difficulties.length,
+          ),
         ),
       ),
     );

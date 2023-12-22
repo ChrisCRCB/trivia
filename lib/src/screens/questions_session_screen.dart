@@ -15,6 +15,7 @@ class QuestionsSessionScreen extends StatefulWidget {
   const QuestionsSessionScreen({
     required this.questionFactory,
     this.questionDifficulty,
+    this.questionCategory,
     super.key,
   });
 
@@ -23,6 +24,9 @@ class QuestionsSessionScreen extends StatefulWidget {
 
   /// The question difficulty to use.
   final QuestionDifficulty? questionDifficulty;
+
+  /// The question category to get questions from.
+  final QuestionCategory? questionCategory;
 
   /// Create state for this widget.
   @override
@@ -150,8 +154,10 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
 
   /// Load the questions to show.
   Future<void> getQuestions(final QuestionDifficulty difficulty) async {
-    final questions =
-        await widget.questionFactory.getQuestions(difficulty: difficulty);
+    final questions = await widget.questionFactory.getQuestions(
+      difficulty: difficulty,
+      category: widget.questionCategory,
+    );
     setState(() {
       loadedQuestions = questions;
     });

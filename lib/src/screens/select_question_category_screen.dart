@@ -25,26 +25,28 @@ class SelectQuestionCategoryScreen extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final future = questionFactory.getCategories();
-    return SimpleScaffold(
-      title: 'Question Categories',
-      body: SimpleFutureBuilder<List<QuestionCategory>>(
-        future: future,
-        done: (final futureContext, final questionCategories) =>
-            ListView.builder(
-          itemBuilder: (final context, final index) {
-            final questionCategory = questionCategories[index];
-            return SoundMenuItem(
-              child: ListTile(
-                autofocus: index == 0,
-                title: Text(unescape.convert(questionCategory.name)),
-                onTap: () => onDone(questionCategory),
-              ),
-            );
-          },
-          itemCount: questionCategories!.length,
+    return Cancel(
+      child: SimpleScaffold(
+        title: 'Question Categories',
+        body: SimpleFutureBuilder<List<QuestionCategory>>(
+          future: future,
+          done: (final futureContext, final questionCategories) =>
+              ListView.builder(
+            itemBuilder: (final context, final index) {
+              final questionCategory = questionCategories[index];
+              return SoundMenuItem(
+                child: ListTile(
+                  autofocus: index == 0,
+                  title: Text(unescape.convert(questionCategory.name)),
+                  onTap: () => onDone(questionCategory),
+                ),
+              );
+            },
+            itemCount: questionCategories!.length,
+          ),
+          loading: (final context) => const LoadingWidget(),
+          error: ErrorListView.withPositional,
         ),
-        loading: (final context) => const LoadingWidget(),
-        error: ErrorListView.withPositional,
       ),
     );
   }

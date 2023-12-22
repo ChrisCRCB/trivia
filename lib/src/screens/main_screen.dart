@@ -8,6 +8,7 @@ import '../../gen/assets.gen.dart';
 import '../widgets/question_factory_builder.dart';
 import '../widgets/sound_menu_item.dart';
 import 'questions_session_screen.dart';
+import 'select_question_category_screen.dart';
 
 /// The main menu for the application.
 class MainScreen extends StatefulWidget {
@@ -64,6 +65,23 @@ class MainScreenState extends State<MainScreen> {
                         ),
                       );
                     },
+                  ),
+                ),
+                SoundMenuItem(
+                  child: ListTile(
+                    title: const Text('Select Question Category'),
+                    onTap: () => context.pushWidgetBuilder(
+                      (final context) => SelectQuestionCategoryScreen(
+                        questionFactory: questionFactory,
+                        onDone: (final questionCategory) =>
+                            context.pushWidgetBuilder(
+                          (final context) => QuestionsSessionScreen(
+                            questionFactory: questionFactory,
+                            questionCategory: questionCategory,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 SoundMenuItem(
