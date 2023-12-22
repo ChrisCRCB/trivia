@@ -1,11 +1,13 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:backstreets_widgets/screens.dart';
 import 'package:backstreets_widgets/util.dart';
 import 'package:backstreets_widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
-import 'package:recase/recase.dart';
 
+import '../../gen/assets.gen.dart';
 import '../widgets/question_widget.dart';
+import 'select_question_difficulty_screen.dart';
 
 /// The main playing screen.
 class QuestionsSessionScreen extends StatefulWidget {
@@ -29,6 +31,9 @@ class QuestionsSessionScreen extends StatefulWidget {
 
 /// State for [QuestionsSessionScreen].
 class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
+  /// The audio player to use.
+  late final AudioPlayer _audioPlayer;
+
   /// The focus node for the question text.
   late final FocusNode questionTextFocusNode;
 
@@ -51,6 +56,7 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
   @override
   void initState() {
     super.initState();
+    _audioPlayer = AudioPlayer();
     questionTextFocusNode = FocusNode();
     questionDifficulty = widget.questionDifficulty;
     questionIndex = 0;
@@ -62,7 +68,13 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
   @override
   void dispose() {
     super.dispose();
+    _audioPlayer.dispose();
     questionTextFocusNode.dispose();
+  }
+
+  /// Play a sound from [assetPath].
+  Future<void> playSound(final String assetPath) async {
+    await _audioPlayer.play(AssetSource(assetPath));
   }
 
   /// Build a widget.
@@ -70,22 +82,11 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
   Widget build(final BuildContext context) {
     final difficulty = questionDifficulty;
     if (difficulty == null) {
-      const difficulties = QuestionDifficulty.values;
-      return SimpleScaffold(
-        title: 'Select Difficulty',
-        body: ListView.builder(
-          itemBuilder: (final context, final index) {
-            final value = difficulties[index];
-            return ListTile(
-              autofocus: value == QuestionDifficulty.medium,
-              title: Text(value.name.titleCase),
-              onTap: () => setState(() {
-                questionDifficulty = value;
-              }),
-            );
-          },
-          itemCount: difficulties.length,
-        ),
+      return SelectQuestionDifficultyScreen(
+        onDone: (final difficulty) {
+          playSound(Assets.sounds.activate);
+          setState(() => questionDifficulty = difficulty);
+        },
       );
     }
     final questions = loadedQuestions;
@@ -120,6 +121,7 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
         question: question,
         onAnswer: (final answer) async {
           if (answer == question.answers.first) {
+            await playSound(Assets.sounds.correct);
             correctAnswers++;
           } else {
             incorrectAnswers++;

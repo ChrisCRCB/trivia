@@ -3,6 +3,7 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
 
 import 'labelled_card.dart';
+import 'sound_menu_item.dart';
 
 /// The unescape converter to use.
 final unescape = HtmlUnescape();
@@ -35,25 +36,29 @@ class QuestionWidget extends StatelessWidget {
     final fullText = '$categoryName. $questionText';
     return Column(
       children: [
-        Focus(
-          autofocus: true,
-          focusNode: questionTextFocusNode,
-          child: LabelledCard(
-            label: fullText,
-            child: Center(
-              child: Text(fullText),
+        SoundMenuItem(
+          child: Focus(
+            autofocus: true,
+            focusNode: questionTextFocusNode,
+            child: LabelledCard(
+              label: fullText,
+              child: Center(
+                child: Text(fullText),
+              ),
             ),
           ),
         ),
         Row(
           children: answers
               .map(
-                (final answer) => InkWell(
-                  child: LabelledCard(
-                    label: answer,
-                    child: Text(answer),
+                (final answer) => SoundMenuItem(
+                  child: InkWell(
+                    child: LabelledCard(
+                      label: answer,
+                      child: Text(answer),
+                    ),
+                    onTap: () => onAnswer(answer),
                   ),
-                  onTap: () => onAnswer(answer),
                 ),
               )
               .toList(),
