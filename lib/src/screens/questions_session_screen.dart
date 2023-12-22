@@ -1,12 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:backstreets_widgets/screens.dart';
 import 'package:backstreets_widgets/util.dart';
-import 'package:backstreets_widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
 
 import '../../gen/assets.gen.dart';
 import '../widgets/question_widget.dart';
+import 'scores_screen.dart';
 import 'select_question_difficulty_screen.dart';
 
 /// The main playing screen.
@@ -99,21 +99,9 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
       return const LoadingScreen();
     }
     if (questionIndex >= questions.length) {
-      return SimpleScaffold(
-        title: 'Results',
-        body: ListView(
-          children: [
-            CopyListTile(
-              title: 'Correct answers',
-              subtitle: correctAnswers.toString(),
-              autofocus: true,
-            ),
-            CopyListTile(
-              title: 'Incorrect answers',
-              subtitle: incorrectAnswers.toString(),
-            ),
-          ],
-        ),
+      return ScoresScreen(
+        correctAnswers: correctAnswers,
+        incorrectAnswers: incorrectAnswers,
       );
     }
     final question = questions[questionIndex];
