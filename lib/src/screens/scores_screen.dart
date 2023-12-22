@@ -39,6 +39,24 @@ class ScoresScreen extends StatelessWidget {
                   subtitle: incorrectAnswers.toString(),
                 ),
               ),
+              SoundMenuItem(
+                child: CopyListTile(
+                  title: 'Correct Per Cent',
+                  subtitle: (100 /
+                          (correctAnswers + incorrectAnswers) *
+                          correctAnswers)
+                      .toStringAsFixed(2),
+                ),
+              ),
+              SoundMenuItem(
+                child: CopyListTile(
+                  title: 'Incorrect Per Cent',
+                  subtitle: (100 /
+                          (correctAnswers + incorrectAnswers) *
+                          incorrectAnswers)
+                      .toStringAsFixed(2),
+                ),
+              ),
             ],
           ),
         ),
