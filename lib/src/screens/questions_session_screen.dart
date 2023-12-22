@@ -81,6 +81,11 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
     await _audioPlayer.play(AssetSource(assetPath));
   }
 
+  /// Stop any playing sound.
+  Future<void> stopSound() async {
+    await _audioPlayer.stop();
+  }
+
   /// Build a widget.
   @override
   Widget build(final BuildContext context) {
@@ -116,13 +121,17 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
             await playSound(Assets.sounds.correct);
             correctAnswers++;
           } else {
+            await playSound(Assets.sounds.incorrect);
             incorrectAnswers++;
-            await showMessage(
-              context: context,
-              message:
-                  'Sorry, the correct answer was ${question.answers.first}.',
-              title: 'Wrong',
-            );
+            if (mounted) {
+              await showMessage(
+                context: context,
+                message:
+                    'Sorry, the correct answer was ${question.answers.first}.',
+                title: 'Wrong',
+              );
+              await stopSound();
+            }
           }
           questionTextFocusNode.requestFocus();
           setState(() {

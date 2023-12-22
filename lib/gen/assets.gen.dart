@@ -18,11 +18,14 @@ class $SoundsGen {
   /// File path: sounds/correct.wav
   String get correct => 'sounds/correct.wav';
 
+  /// File path: sounds/incorrect.wav
+  String get incorrect => 'sounds/incorrect.wav';
+
   /// File path: sounds/select.wav
   String get select => 'sounds/select.wav';
 
   /// List of all assets
-  List<String> get values => [activate, correct, select];
+  List<String> get values => [activate, correct, incorrect, select];
 }
 
 class Assets {
