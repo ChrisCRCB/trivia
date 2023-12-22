@@ -20,6 +20,11 @@ class LabelledCard extends StatelessWidget {
   Widget build(final BuildContext context) => Semantics(
         excludeSemantics: true,
         label: label,
-        child: child,
+        child: Card(
+          margin: const EdgeInsets.all(30.0),
+          color: Colors.white,
+          elevation: 55.0,
+          child: child,
+        ),
       );
 }

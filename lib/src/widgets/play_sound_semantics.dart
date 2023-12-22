@@ -26,11 +26,15 @@ class PlaySoundSemanticsState extends State<PlaySoundSemantics> {
   /// The audio players to use.
   late final AudioPlayer _audioPlayer;
 
+  /// The source to use.
+  late final AssetSource _source;
+
   /// Initialise state.
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+    _source = AssetSource(widget.assetPath);
   }
 
   /// Dispose of the widget.
@@ -50,7 +54,8 @@ class PlaySoundSemanticsState extends State<PlaySoundSemantics> {
 
   /// Play the sound.
   Future<void> play() async {
-    await _audioPlayer.play(AssetSource(widget.assetPath));
+    await stop();
+    await _audioPlayer.play(_source);
   }
 
   /// Stop playing the sound.

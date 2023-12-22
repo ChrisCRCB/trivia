@@ -30,7 +30,10 @@ class QuestionWidget extends StatelessWidget {
   /// Build the widget.
   @override
   Widget build(final BuildContext context) {
-    final answers = List<String>.from(question.answers)..shuffle();
+    final answers = switch (question.type) {
+      QuestionType.multiple => List<String>.from(question.answers)..shuffle(),
+      QuestionType.boolean => question.answers,
+    };
     final categoryName = unescape.convert(question.categoryName);
     final questionText = unescape.convert(question.question);
     final fullText = '$categoryName. $questionText';
@@ -43,7 +46,10 @@ class QuestionWidget extends StatelessWidget {
             child: LabelledCard(
               label: fullText,
               child: Center(
-                child: Text(fullText),
+                child: Text(
+                  fullText,
+                  style: const TextStyle(fontSize: 36),
+                ),
               ),
             ),
           ),
@@ -55,7 +61,14 @@ class QuestionWidget extends StatelessWidget {
                   child: InkWell(
                     child: LabelledCard(
                       label: answer,
-                      child: Text(answer),
+                      child: Text(
+                        answer,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     onTap: () => onAnswer(answer),
                   ),
