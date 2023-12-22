@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:html_unescape/html_unescape.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
 
+import '../constants.dart';
 import 'labelled_card.dart';
 import 'sound_menu_item.dart';
-
-/// The unescape converter to use.
-final unescape = HtmlUnescape();
 
 /// A widget to show a single [question].
 class QuestionWidget extends StatelessWidget {
