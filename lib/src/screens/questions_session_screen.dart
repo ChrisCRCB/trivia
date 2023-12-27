@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
 
 import '../../gen/assets.gen.dart';
+import '../widgets/music.dart';
 import '../widgets/question_widget.dart';
 import 'scores_screen.dart';
 import 'select_question_difficulty_screen.dart';
@@ -77,7 +78,11 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
   }
 
   /// Play a sound from [assetPath].
-  Future<void> playSound(final String assetPath) async {
+  Future<void> playSound(
+    final String assetPath, {
+    final double volume = 0.5,
+  }) async {
+    await _audioPlayer.setVolume(volume);
     await _audioPlayer.play(AssetSource(assetPath));
   }
 
@@ -90,63 +95,64 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
   @override
   Widget build(final BuildContext context) {
     final difficulty = questionDifficulty;
+    final Widget child;
+    final questions = loadedQuestions;
     if (difficulty == null) {
-      return SelectQuestionDifficultyScreen(
+      child = SelectQuestionDifficultyScreen(
         onDone: (final difficulty) {
           playSound(Assets.sounds.activate);
           setState(() => questionDifficulty = difficulty);
         },
       );
-    }
-    final questions = loadedQuestions;
-    if (questions == null) {
+    } else if (questions == null) {
       getQuestions(difficulty);
-      return const LoadingScreen();
-    }
-    if (questionIndex >= questions.length) {
-      return ScoresScreen(
+      child = const LoadingScreen();
+    } else if (questionIndex >= questions.length) {
+      child = ScoresScreen(
         correctAnswers: correctAnswers,
         incorrectAnswers: incorrectAnswers,
       );
-    }
-    final question = questions[questionIndex];
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Question ${questionIndex + 1} of ${questions.length}'),
-      ),
-      body: QuestionWidget(
-        question: question,
-        onAnswer: (final answer) async {
-          if (answer == question.answers.first) {
-            await playSound(Assets.sounds.correct);
-            correctAnswers++;
-          } else {
-            await playSound(Assets.sounds.incorrect);
-            incorrectAnswers++;
-            if (mounted) {
-              await showMessage(
-                context: context,
-                message:
-                    'Sorry, the correct answer was ${question.answers.first}.',
-                title: 'Wrong',
-              );
-              await stopSound();
-            }
-          }
-          questionTextFocusNode.requestFocus();
-          setState(() {
-            questionIndex++;
-          });
-        },
-        questionTextFocusNode: questionTextFocusNode,
-      ),
-      bottomSheet: Focus(
-        child: Text(
-          'Correct answers: $correctAnswers\n'
-          'Incorrect answers: $incorrectAnswers',
+    } else {
+      final question = questions[questionIndex];
+      child = Scaffold(
+        appBar: AppBar(
+          title: Text('Question ${questionIndex + 1} of ${questions.length}'),
         ),
-      ),
-    );
+        body: QuestionWidget(
+          question: question,
+          onAnswer: (final answer) async {
+            final correct = question.answers.first;
+            if (answer == correct) {
+              await playSound(Assets.sounds.correct);
+              correctAnswers++;
+            } else {
+              await playSound(Assets.sounds.incorrect);
+              incorrectAnswers++;
+              if (mounted) {
+                await showMessage(
+                  context: context,
+                  message: 'Sorry, the correct answer was $correct.',
+                  title: 'Wrong',
+                );
+                await stopSound();
+              }
+            }
+            questionTextFocusNode.requestFocus();
+            setState(() {
+              questionIndex++;
+            });
+          },
+          questionTextFocusNode: questionTextFocusNode,
+        ),
+        bottomSheet: Focus(
+          child: Text(
+            'Correct answers: $correctAnswers\n'
+            'Incorrect answers: $incorrectAnswers',
+          ),
+        ),
+      );
+    }
+    return Music(assetPath: Assets.sounds.music, child: child);
   }
 
   /// Load the questions to show.
