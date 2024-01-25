@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:open_trivia_db/open_trivia_db.dart';
 
@@ -43,7 +44,7 @@ class QuestionWidget extends StatelessWidget {
             child: LabelledCard(
               label: fullText,
               child: Center(
-                child: Text(
+                child: AutoSizeText(
                   fullText,
                   style: const TextStyle(fontSize: 36),
                 ),

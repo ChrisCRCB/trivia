@@ -128,7 +128,7 @@ class QuestionsSessionScreenState extends State<QuestionsSessionScreen> {
             } else {
               await playSound(Assets.sounds.incorrect);
               incorrectAnswers++;
-              if (mounted) {
+              if (context.mounted) {
                 await showMessage(
                   context: context,
                   message: 'Sorry, the correct answer was $correct.',
